@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block c %}
+<h2>{{d.name}}</h2>
+<p><a href="/device/{{d.id}}/firmware.zip"><b>Скачать прошивку (zip)</b></a> — после смены настроек скачайте заново и перепрошейте.</p>
+<h3>Настройки</h3>
+<form method="post" action="/device/{{d.id}}/edit">{% include "_devform.html" %}<br><button>Сохранить</button></form>
+<h3>GPS-трек</h3>
+<p>Приём координат с телефона или трекера: POST {{d.server_url}}/api/gps?token={{d.token}}, JSON: latitude, longitude, accuracy, timestamp.</p>
+{% if points %}
+<p>Последняя точка: {{points[0].lat}}, {{points[0].lon}} — <a href="https://www.openstreetmap.org/?mlat={{points[0].lat}}&mlon={{points[0].lon}}#map=14/{{points[0].lat}}/{{points[0].lon}}">на карте</a></p>
+<table><tr><th>Время</th><th>Широта</th><th>Долгота</th><th>Точность, м</th><th>Скорость, км/ч</th></tr>
+{% for p in points %}<tr><td>{{p.ts.strftime('%Y-%m-%d %H:%M:%S')}}</td><td>{{p.lat}}</td><td>{{p.lon}}</td><td>{{p.accuracy}}</td><td>{{'%.1f'|format(p.speed_kmh) if p.speed_kmh is not none else ''}}</td></tr>{% endfor %}</table>
+{% else %}<p>Точек GPS пока нет.</p>{% endif %}
+<h3>Аномалии GPS (статистический AI-детектор)</h3>
+{% if findings %}<table><tr><th>Время</th><th>Уровень</th><th>Причина</th></tr>
+{% for f in findings %}<tr><td>{{f.ts.strftime('%Y-%m-%d %H:%M:%S')}}</td><td>{{f.severity}}</td><td>{{f.reason}}</td></tr>{% endfor %}</table>
+{% else %}<p>Аномалий нет.</p>{% endif %}
+<h3>Журнал событий</h3>
+{% include "_events.html" %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block c %}
+<h2>Мои устройства</h2>
+<table><tr><th>Название</th><th>Чип</th><th>Координаты</th><th>Токен</th><th></th></tr>
+{% for x in devices %}<tr><td>{{x.name}}</td><td>{{x.chip}}</td><td>{{x.lat}}, {{x.lon}}</td><td>{{x.token[:8]}}…</td><td><a href="/device/{{x.id}}">Открыть / прошивка</a></td></tr>{% endfor %}</table>
+<h3>Новое устройство</h3>
+<form method="post" action="/device/new">{% include "_devform.html" %}<br><button>Создать</button></form>
+<h2>Журнал событий (все устройства)</h2>
+{% set show_dev=true %}{% include "_events.html" %}
+{% endblock %}

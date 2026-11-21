@@ -1,0 +1,9 @@
+<table><tr><th>Время</th>{% if show_dev %}<th>Устройство</th>{% endif %}<th>Координаты</th><th>Тип звука</th><th>Птица</th><th>Уверенность</th><th>Сигнал (Оптика)</th><th>Подробности</th><th>Запись</th></tr>
+{% for e in events %}<tr><td>{{e.ts.strftime('%Y-%m-%d %H:%M:%S')}}</td>{% if show_dev %}<td>{{e.dname}}</td>{% endif %}
+<td>{{'%.5f'|format(e.lat)}}, {{'%.5f'|format(e.lon)}}</td>
+<td>{% if e.status=='pending' %}анализ…{% else %}<b>{{e.kind or '—'}}</b>{% endif %}</td>
+<td>{{e.species or '—'}}</td>
+<td>{% if e.confidence %}{{'%.0f'|format(e.confidence*100)}}%{% endif %}</td>
+<td style="font-size:12px">{% if e.dev_mini %}плата: {{e.dev_mini}}, ур. {{e.dev_level}}%<br>{% endif %}{% if e.level is not none %}{{e.mini_class}} {{'%.0f'|format(e.mini_conf*100)}}%<br>уровень {{e.level}}%, острота {{'%.1f'|format(e.crest)}}<br>оптич. модуляция {{'%.2f'|format(e.optical_depth)}}{% endif %}</td>
+<td style="font-size:12px">{{e.details or ''}}</td>
+<td><audio controls preload="none" src="/audio/{{e.audio}}"></audio></td></tr>{% endfor %}</table>

@@ -1,0 +1,8 @@
+flask
+psycopg[binary]
+numpy
+tensorflow
+tensorflow_hub
+birdnetlib
+librosa
+resampy

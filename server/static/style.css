@@ -1,0 +1,13 @@
+body{font-family:sans-serif;margin:0;background:#fff;color:#111}
+header{background:#2e7d32;color:#fff;padding:10px 20px}
+header a{color:#fff;margin-left:15px}
+main{padding:20px;max-width:1300px;margin:auto}
+h2,h3{color:#2e7d32}
+table{border-collapse:collapse;width:100%;margin-bottom:20px}
+th{background:#c8e6c9}
+th,td{border:1px solid #81c784;padding:5px;text-align:left;font-size:14px}
+input,select{padding:4px;margin:2px 0;width:260px}
+button{background:#2e7d32;color:#fff;border:0;padding:6px 14px;cursor:pointer;margin-top:6px}
+label{display:block;margin-top:6px}
+.err{color:#c62828}
+a{color:#2e7d32}

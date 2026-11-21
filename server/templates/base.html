@@ -1,0 +1,5 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>BirdBox</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/static/style.css"></head><body>
+<header><b>BirdBox</b>{% if session.uid %}<a href="/">Устройства</a><a href="/optics/">Оптика</a><a href="/static/sim/index.html">Симулятор: оптика, кольцо, микрофон</a><a href="/logout">Выйти</a>{% endif %}</header>
+<main>{% block c %}{% endblock %}</main></body></html>

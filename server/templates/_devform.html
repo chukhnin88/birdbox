@@ -1,0 +1,12 @@
+<label>Название<br><input name="name" value="{{d.name}}" required></label>
+<label>Чип<br><select name="chip">{% for k in ['esp32','esp32s3'] %}<option value="{{k}}" {{'selected' if d.chip==k}}>{{k}}</option>{% endfor %}</select></label>
+<label>Широта<br><input name="lat" value="{{d.lat}}"></label>
+<label>Долгота<br><input name="lon" value="{{d.lon}}"></label>
+<label>Wi-Fi SSID (где будет стоять устройство)<br><input name="wifi_ssid" value="{{d.wifi_ssid}}"></label>
+<label>Wi-Fi пароль<br><input name="wifi_pass" value="{{d.wifi_pass}}"></label>
+<label>Адрес сервера (НЕ localhost! адрес, доступный с платы, напр. http://192.168.0.10:5000)<br><input name="server_url" value="{{d.server_url}}" style="width:420px"></label>
+<label>Интервал прослушивания, сек (больше = дольше работает от батареи)<br><input name="listen_sec" value="{{d.listen_sec}}"></label>
+<label>Пауза после отправки, сек (экономия при непрерывном шуме)<br><input name="cooldown_sec" value="{{d.cooldown_sec}}"></label>
+<label>GPS-модуль подключён к плате (0 - нет, 1 - да)<br><input name="gps_mode" value="{{d.gps_mode}}"></label>
+<label>Мин. порог громкости (меньше = чувствительнее; 0 = ТЕСТ: отправлять запись при каждом пробуждении)<br><input name="threshold" value="{{d.threshold}}"></label>
+<label>Усиление микрофона (1-8)<br><input name="gain" value="{{d.gain}}"></label>

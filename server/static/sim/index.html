@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Оптика + звук — симулятор</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Оптика + звук</h1>
+  <p class="subtitle">Интерактивный симулятор: оптоволокно и акустика, кольцо птицы, микрофон без батарейки</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="optics">1. Оптика и звук</button>
+  <button class="tab" data-tab="birdring">2. Кольцо птицы</button>
+  <button class="tab" data-tab="mic">3. Микрофон без батарейки</button>
+</nav>
+
+<main>
+
+<section id="optics" class="tab-panel active">
+  <h2>Оптический микрофон: как звук модулирует свет</h2>
+
+  <div class="layout">
+    <div class="controls">
+      <h3>Параметры</h3>
+
+      <label>Частота звука: <span id="freqVal">440</span> Гц
+        <input type="range" id="freq" min="20" max="5000" value="440" step="10">
+      </label>
+
+      <label>Амплитуда давления: <span id="ampVal">10</span> Па
+        <input type="range" id="amp" min="0" max="50" value="10" step="1">
+      </label>
+
+      <label>Зазор между волокнами: <span id="gapVal">5.0</span> мкм
+        <input type="range" id="gap" min="1" max="20" value="5" step="0.1">
+      </label>
+
+      <label>Длина волны света: <span id="lambdaVal">850</span> нм
+        <input type="range" id="lambda" min="400" max="1600" value="850" step="10">
+      </label>
+
+      <label>Коэффициент отражения мембраны R: <span id="rVal">0.30</span>
+        <input type="range" id="r" min="0.01" max="0.95" value="0.30" step="0.01">
+      </label>
+
+      <div class="mode-switch">
+        <label><input type="radio" name="mode" value="intensity" checked> Интенсивностная модуляция</label>
+        <label><input type="radio" name="mode" value="fabry"> Интерференция Фабри–Перо</label>
+      </div>
+
+      <button id="toggleRun">Пауза</button>
+    </div>
+
+    <div class="visuals">
+      <h3>Схема</h3>
+      <canvas id="schemeCanvas" width="640" height="140"></canvas>
+
+      <h3>Сигналы</h3>
+      <canvas id="signalCanvas" width="640" height="320"></canvas>
+
+      <div id="opticsReport" class="report"></div>
+    </div>
+  </div>
+</section>
+
+<section id="birdring" class="tab-panel">
+  <h2>Кольцо на ноге птицы: три уровня передачи информации</h2>
+
+  <div class="layout">
+    <div class="controls">
+      <h3>Метод</h3>
+      <label><input type="radio" name="ringMethod" value="vhf" checked> VHF-радиометка</label>
+      <label><input type="radio" name="ringMethod" value="gps"> GPS / Argos</label>
+      <label><input type="radio" name="ringMethod" value="gls"> Геолокатор (GLS)</label>
+
+      <label>Расстояние до птицы: <span id="distVal">5</span> км
+        <input type="range" id="dist" min="0.1" max="50" value="5" step="0.1">
+      </label>
+
+      <label>Угол антенны: <span id="angleVal">0</span>°
+        <input type="range" id="angle" min="-90" max="90" value="0" step="1">
+      </label>
+
+      <button id="simulateRing">Смоделировать</button>
+    </div>
+
+    <div class="visuals">
+      <canvas id="ringCanvas" width="640" height="320"></canvas>
+      <div id="ringReport" class="report"></div>
+    </div>
+  </div>
+</section>
+
+<section id="mic" class="tab-panel">
+  <h2>Микрофон без батарейки и без кабеля</h2>
+
+  <div class="layout">
+    <div class="controls">
+      <h3>Тип микрофона</h3>
+      <label><input type="radio" name="micType" value="electret" checked> Электретный</label>
+      <label><input type="radio" name="micType" value="rf"> Пассивный RF (индуктивная связь)</label>
+
+      <label>Звуковое давление: <span id="pressureVal">0.5</span> Па
+        <input type="range" id="pressure" min="0" max="5" value="0.5" step="0.01">
+      </label>
+
+      <label>Расстояние до считывателя: <span id="readerVal">3</span> см
+        <input type="range" id="reader" min="0.5" max="20" value="3" step="0.1">
+      </label>
+
+      <button id="simulateMic">Смоделировать</button>
+
+      <hr>
+      <h3>Проверка микрофона при ветре</h3>
+      <p class="hint">Демонстрационная модель шума ветра — не запись с настоящего микрофона.</p>
+      <label>Сила ветра: <span id="windVal">0</span> / 10
+        <input type="range" id="wind" min="0" max="10" value="0" step="1">
+      </label>
+      <label>Уровень полезного звука: <span id="wantedVal">70</span>%
+        <input type="range" id="wanted" min="10" max="100" value="70" step="5">
+      </label>
+      <button id="testWind">Проверить качество</button>
+
+      <hr>
+      <h3>Измерение с настоящего микрофона</h3>
+      <p class="hint">Браузер попросит разрешение на доступ к микрофону. Звук обрабатывается локально и не отправляется на сервер.</p>
+      <label>Устройство ввода:
+      <select id="micDevice">
+      <option value="">По умолчанию (система)</option>
+      </select>
+      </label>
+      <button id="refreshDevices" type="button">Обновить список</button>
+      <button id="refreshDevices" type="button">Обновить список</button>
+      <button id="startRealMic">Включить микрофон</button>
+      <button id="stopRealMic" disabled>Остановить</button>
+      <div id="realMicStatus" class="report">Микрофон выключен.</div>
+      <label>Текущий уровень звука: <b><span id="realMicLevel">0</span>%</b></label>
+      <div class="level-track"><div id="realMicBar" class="level-bar"></div></div>
+      <div id="realMicAdvice" class="hint">Нажми «Включить микрофон», чтобы начать измерение.</div>
+      <h4>Мини-нейросеть: демонстрационная классификация</h4>
+      <p class="hint">Небольшая нейросетевая модель получает два признака сигнала и выбирает вероятный класс. Это прототип с вручную заданными весами, не обученная на датасете модель.</p>
+      <div id="neuralReport" class="report">Включи микрофон, чтобы анализировать звук.</div>
+      <div id="soundEventReport" class="report"><b>Обнаружение событий:</b> пока событий нет. Включи микрофон и хлопни в ладоши.</div>
+      <h4>Настоящая предобученная нейросеть YAMNet</h4>
+      <p class="hint">YAMNet — настоящая предобученная нейросеть для классификации 521 класса звуков. Результаты отображаются по-русски там, где доступен перевод. Модель и вычислительный модуль загружаются из интернета при запуске. Подключи микрофон и нажми кнопку ниже.</p>
+      <button id="startYamnet">Загрузить модель и начать распознавание</button>
+      <button id="stopYamnet" disabled>Остановить распознавание</button>
+      <div id="yamnetStatus" class="report">Модель ещё не загружена.</div>
+      <div id="yamnetResults" class="report">Здесь появятся наиболее вероятные классы звука.</div>
+      <div id="motorDetection" class="report"><b>Распознавание мотора:</b> включи YAMNet и воспроизведи звук работающего двигателя.</div>
+
+      <h4>Сравнение условий (по 3 секунды)</h4>
+      <p class="hint">Сначала запиши фон в тишине, затем измерь звук в шумных условиях. Это сравнение уровня, а не автоматическое распознавание ветра.</p>
+      <button id="captureQuiet" disabled>Измерить тихий фон</button>
+      <button id="captureNoise" disabled>Измерить шум</button>
+      <div id="comparisonReport" class="report">Включи микрофон, чтобы начать сравнение.</div>
+
+      <hr>
+      <h4>Оцифровка звука (учебная модель)</h4>
+      <p class="hint">Нажми кнопку, чтобы увидеть, как звуковая волна превращается в отсчёты и двоичные числа. Это визуализация принципа, не запись сигнала с кабеля.</p>
+      <button id="digitizeDemo">Показать оцифровку</button>
+      <canvas id="digitizeCanvas" width="640" height="220"></canvas>
+      <div id="digitizeReport" class="report">Здесь появятся отсчёты и их двоичное представление.</div>
+
+    </div>
+
+    <div class="visuals">
+      <canvas id="micCanvas" width="640" height="320"></canvas>
+      <div id="micReport" class="report"></div>
+      <h3>Влияние ветра на сигнал</h3>
+      <canvas id="windCanvas" width="640" height="180"></canvas>
+      <div id="windReport" class="report"></div>
+    </div>
+  </div>
+      <h4>Сравнение условий (по 3 секунды)</h4>
+      <p class="hint">Сначала запиши фон в тишине, затем измерь звук в шумных условиях. Это сравнение уровня, а не автоматическое распознавание ветра.</p>
+      <button id="captureQuiet" disabled>Измерить тихий фон</button>
+      <button id="captureNoise" disabled>Измерить шум</button>
+      <div id="comparisonReport" class="report">Включи микрофон, чтобы начать сравнение.</div>
+
+      <hr>
+      <h4>Оцифровка звука (учебная модель)</h4>
+      <p class="hint">Нажми кнопку, чтобы увидеть, как звуковая волна превращается в отсчёты и двоичные числа. Это визуализация принципа, не запись сигнала с кабеля.</p>
+      <button id="digitizeDemo">Показать оцифровку</button>
+      <canvas id="digitizeCanvas" width="640" height="220"></canvas>
+      <div id="digitizeReport" class="report">Здесь появятся отсчёты и их двоичное представление.</div>
+
+    </div>
+
+    <div class="visuals">
+      <canvas id="micCanvas" width="640" height="320"></canvas>
+      <div id="micReport" class="report"></div>
+      <h3>Влияние ветра на сигнал</h3>
+      <canvas id="windCanvas" width="640" height="180"></canvas>
+      <div id="windReport" class="report"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>Учебный симулятор. Модели упрощены; формулы — в исходном коде (js/*.js).</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/optics.js"></script>
+<script src="js/bridring.js"></script>
+<script src="js/mic.js"></script>
+<script type="module" src="js/yamnet.js"></script>
+</body>
+</html>
